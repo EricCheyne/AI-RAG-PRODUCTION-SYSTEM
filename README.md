@@ -1,45 +1,58 @@
-# AI-RAG-PRODUCTION-SYSTEM
-AI Document Intelligence Platform
+# AI Document Intelligence Platform (RAG)
 
-Stack:
+A production-style RAG system built with FastAPI, Celery, and pgvector.
 
-Next.js (frontend)
+## Project Structure
 
-FastAPI (AI processing)
+```text
+.
+├── apps/
+│   ├── api/          # FastAPI application
+│   └── worker/       # Celery worker for background processing
+├── packages/
+│   └── core/         # Shared modules (models, schemas, utils)
+├── docker-compose.yml # Infrastructure (Postgres + Redis)
+└── .env.example       # Environment variables template
+```
 
-PostgreSQL + pgvector
+## Stack
 
-Embeddings pipeline
+- **FastAPI**: Main API for document management and retrieval.
+- **Celery**: Distributed task queue for document embedding and processing.
+- **Postgres (pgvector)**: Vector database for storing document embeddings.
+- **Redis**: Message broker for Celery.
+- **OpenAI**: Default LLM and Embedding provider.
 
-Dockerized microservices
+## Getting Started
 
-Architecture:
-Upload Document
-   ↓
-Chunk + Embed
-   ↓
-Store in Postgres (pgvector)
-   ↓
-Similarity Search
-   ↓
-LLM Response with Context
+### Prerequisites
 
-Add:
+- Docker and Docker Compose
+- Python 3.10+
 
-Auth
+### Local Setup
 
-Multi-user
+1. **Clone the repository**
+2. **Copy environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+3. **Start infrastructure**
+   ```bash
+   docker-compose up -d
+   ```
+4. **Install dependencies (Example for API)**
+   ```bash
+   cd apps/api
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
 
-Role permissions
+### Running Locally
 
-Rate limiting
+- **API**: `cd apps/api && uvicorn main:app --reload`
+- **Worker**: `cd apps/worker && celery -A main.celery_app worker --loglevel=info`
 
-This shows:
-
-AI engineering
-
-Vector databases
-
-Clean service separation
-
-System design maturity
+## License
+MIT
